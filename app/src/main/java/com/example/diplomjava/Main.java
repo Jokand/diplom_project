@@ -97,7 +97,11 @@ public class Main {
             } else if (location_vote < locations.size()) {
                 if (locations.get(location_vote).exploration(hero)) {
                     break;
-                }
+                } else ritual_counter--;
+            }
+            if (ritual_counter<=0) {
+                System.out.println("Вы не успели сорвать планы культистов и весь мир поглотило безумие и тьма");
+                break;
             }
         }
     }
