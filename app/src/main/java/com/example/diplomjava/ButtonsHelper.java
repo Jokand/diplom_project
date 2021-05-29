@@ -36,9 +36,8 @@ public class ButtonsHelper extends AppCompatActivity {
         btn = new Button(context);
         btn.setText("Начать игру");
         btn.setOnClickListener(v->{
-            someTextHelper.setText("Вы находитесь на своей базе, выберите куда вы пойдёте сейчас:");
-            textsLayout.addView(someTextHelper);
-            //buttonsLayout.addView(getWaitingButton("Сидеть и ждать", hero));
+            someTextHelper.setText("\n Вы находитесь на своей базе, выберите куда вы пойдёте сейчас:");
+            buttonsLayout.addView(getWaitingButton("Сидеть и ждать", hero));
             for (int i = 0; i < locations.size(); i++) {
                 Button b = new Button(context);
                 b.setText(locations.get(i).name);
@@ -56,11 +55,12 @@ public class ButtonsHelper extends AppCompatActivity {
                                 buttonsLayout.addView(getButton("Закончить выбор снаряжения"));
                                 for (int i = 0; i < hero.available_equipment.size(); i++) {
                                     if (hero.available_equipment.get(i) instanceof weapon) {
-                                        buttonsLayout.addView(getInventoryButton(((weapon) hero.available_equipment.get(i)).name, i, hero));
+                                        buttonsLayout.addView(getInventoryButton( ((weapon) hero.available_equipment.get(i)).name, i, hero));
                                     } else {
                                         buttonsLayout.addView(getInventoryButton(((clothes) hero.available_equipment.get(i)).name, i, hero));
                                     }
                                 }
+
                             }
                         }
                     });
@@ -70,13 +70,13 @@ public class ButtonsHelper extends AppCompatActivity {
                     public void onClick(View v) {
                         if (finalI < locations.size()) {
                             if (locations.get(finalI).exploration(hero)) {
-                                btn.setText("Вы проиграли");
+                                return;
                             } else MainActivity.ritual_counter--;
                         }
+
                     }
                 });
-                //((LinearLayout) findViewById(R.id.layout)).addView(b);
-                buttonsLayout.addView(b);
+//            ((LinearLayout) findViewById(R.id.layout)).addView(b);
             }
         });
         return btn;
@@ -88,7 +88,6 @@ public class ButtonsHelper extends AppCompatActivity {
         return btn;
     }
     public Button getWaitingButton(String text, avatar hero){
-        btn = new Button(context);
         btn.setText(text);
         btn.setOnClickListener(v->{
             MainActivity.ritual_counter--;
