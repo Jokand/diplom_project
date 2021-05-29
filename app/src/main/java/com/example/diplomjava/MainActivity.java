@@ -30,14 +30,12 @@ public class MainActivity extends AppCompatActivity {
         locations.add(engine_room);
         locations.add(warehouse);
         avatar hero = new avatar(20, 30, 10, 10, 4, null, null, null, null);
-
-        String logo = "Приветствие игрока, ввод в курс дела. После приветствия перед игроком описывается база и концепция вылазок глазами главного героя. " +
-                "\n Вы находитесь на своей базе, выберите куда вы пойдёте сейчас:";
-        TextView someTextHelper = new TextView(this);
-        someTextHelper.setText(logo);
-        textsLayout.addView(someTextHelper);
         ButtonsHelper helper = new ButtonsHelper(MainActivity.this);
+        TextView someTextHelper = new TextView(MainActivity.this);
+        String logo = "Приветствие игрока, ввод в курс дела. После приветствия перед игроком описывается база и концепция вылазок глазами главного героя.";
+        someTextHelper.setText(logo);
+        someTextHelper.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        textsLayout.addView(someTextHelper);
         buttonsLayout.addView(helper.getStartButton(locations, hero));
-
     }
 }

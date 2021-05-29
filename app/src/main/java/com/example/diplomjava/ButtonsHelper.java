@@ -25,26 +25,26 @@ public class ButtonsHelper extends AppCompatActivity {
     Context context;
     Button btn;
     TextView someTextHelper;
-    ButtonsHelper helper;
+
 
     public ButtonsHelper(Context context){
         this.context = context;
         this.someTextHelper = new TextView(context);
-        this.helper = new ButtonsHelper(context);
     }
 
     public Button getStartButton(ArrayList<location> locations, avatar hero){
         btn = new Button(context);
         btn.setText("Начать игру");
         btn.setOnClickListener(v->{
-            buttonsLayout.addView(helper.getWaitingButton("0. Сидеть и ждать", hero));
-            Button btn = new Button(context);
+            someTextHelper.setText("Вы находитесь на своей базе, выберите куда вы пойдёте сейчас:");
+            textsLayout.addView(someTextHelper);
+            //buttonsLayout.addView(getWaitingButton("Сидеть и ждать", hero));
             for (int i = 0; i < locations.size(); i++) {
                 Button b = new Button(context);
-                b.setText((i + 1) + ". " + locations.get(i).name);
+                b.setText(locations.get(i).name);
                 int finalI = i - 1;
                 if(i + 1 == locations.size()){
-                    btn.setText("locations.size() + 1 + \". Выбор брони и оружия перед вылазкой\"");
+                    btn.setText("Выбор брони и оружия перед вылазкой");
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -53,15 +53,14 @@ public class ButtonsHelper extends AppCompatActivity {
                                 hero.const_armor_mind = 10 + hero.head_clothes.mind_armor_class + hero.body_clothes.mind_armor_class + hero.legs_clothes.mind_armor_class;
                                 hero.avatar_review();
 
-                                buttonsLayout.addView(helper.getButton("0. Закончить выбор снаряжения"));
+                                buttonsLayout.addView(getButton("Закончить выбор снаряжения"));
                                 for (int i = 0; i < hero.available_equipment.size(); i++) {
                                     if (hero.available_equipment.get(i) instanceof weapon) {
-                                        buttonsLayout.addView(helper.getInventoryButton((i + 1) + ". " + ((weapon) hero.available_equipment.get(i)).name, i, hero));
+                                        buttonsLayout.addView(getInventoryButton(((weapon) hero.available_equipment.get(i)).name, i, hero));
                                     } else {
-                                        buttonsLayout.addView(helper.getInventoryButton((i + 1) + ". " + ((clothes) hero.available_equipment.get(i)).name, i, hero));
+                                        buttonsLayout.addView(getInventoryButton(((clothes) hero.available_equipment.get(i)).name, i, hero));
                                     }
                                 }
-
                             }
                         }
                     });
@@ -71,13 +70,13 @@ public class ButtonsHelper extends AppCompatActivity {
                     public void onClick(View v) {
                         if (finalI < locations.size()) {
                             if (locations.get(finalI).exploration(hero)) {
-                                return;
+                                btn.setText("Вы проиграли");
                             } else MainActivity.ritual_counter--;
                         }
-
                     }
                 });
-//            ((LinearLayout) findViewById(R.id.layout)).addView(b);
+                //((LinearLayout) findViewById(R.id.layout)).addView(b);
+                buttonsLayout.addView(b);
             }
         });
         return btn;
