@@ -15,13 +15,13 @@ import java.util.ArrayList;
 public class ButtonsHelper extends AppCompatActivity {
 
     LinearLayout textsLayout, buttonsLayout;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.game_field);
-        textsLayout = findViewById(R.id.linearLayoutText);
-        buttonsLayout = findViewById(R.id.linearLayoutButton);
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.game_field);
+//        textsLayout = findViewById(R.id.linearLayoutText);
+//        buttonsLayout = findViewById(R.id.linearLayoutButton);
+//    }
     Context context;
     Button btn;
     TextView someTextHelper;
@@ -87,6 +87,7 @@ public class ButtonsHelper extends AppCompatActivity {
         btn.setText(text);
         return btn;
     }
+
     public Button getWaitingButton(String text, avatar hero){
         btn.setText(text);
         btn.setOnClickListener(v->{
@@ -96,6 +97,7 @@ public class ButtonsHelper extends AppCompatActivity {
         });
         return btn;
     }
+
     @SuppressLint("SetTextI18n")
     public Button getInventoryButton(String text, int i, avatar hero){
         btn = new Button(context);

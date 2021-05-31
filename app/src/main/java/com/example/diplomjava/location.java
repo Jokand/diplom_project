@@ -7,16 +7,16 @@ import java.util.Scanner;
 public class location{
     String name;
     String description;
-    ArrayList<Object> loot;
+    static ArrayList<Object> loot;
     ArrayList<event> event;
     ArrayList<enemy> enemy_in_location;
     Scanner cin = new Scanner(System.in);
-    public location(String name, String description) {
+    public location(String name, String description, ArrayList<Object> loot, ArrayList<event> event,  ArrayList<enemy> enemy_in_location) {
         this.name = name;
         this.description = description;
-        this.loot = new ArrayList<>();
-        this.event = new ArrayList<>();
-        this.enemy_in_location = new ArrayList<>();
+        location.loot = loot;
+        this.event = event;
+        this.enemy_in_location = enemy_in_location;
     }
     boolean exploration(avatar hero){
         int chance_exploration = new Random().nextInt(11);
@@ -38,7 +38,7 @@ public class location{
         return false;
     }
 
-    void giving_out_loot(avatar hero){
+    static void giving_out_loot(avatar hero){
         System.out.println("Вы порылись в ящиках и нашли некоторые вещи:");
         for (int i = 0; i < Math.random() * 2; i++) {
             Object Added_item = loot.get(new Random().nextInt(loot.size()));
@@ -55,7 +55,7 @@ public class location{
         }
     }
 
-    public class event{
+    public static class event{
         String description;
         String true_answer;
         ArrayList<String> false_answer;

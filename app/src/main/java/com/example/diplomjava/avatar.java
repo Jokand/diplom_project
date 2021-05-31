@@ -10,6 +10,36 @@ public class avatar {
     weapon weapon;
     clothes head_clothes, body_clothes, legs_clothes;
 
+    TextView numeralInput;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.act_main);
+        numeralInput = (TextView) findViewById(R.id.textView);
+
+        convert.setOnClickListener(
+                new View.OnClickListener() {
+                    public void onClick(View v) {
+
+                        String intValue = numeralInput.getText().toString();
+                        try{
+                            int integer = Integer.parseInt(intValue);
+                            if (integer > 0 && integer <= 4999){
+                                translator(integer);
+
+                            }else{
+                                numeralInput.setText("Please enter an integer between 0 and 4,999.");
+                            }
+
+                        }catch(NumberFormatException e){
+                            numeralInput.setText("Invalid input try again.");
+                        }
+                    }
+                }
+        );
+
     public avatar(int xp, int mind, int armor, int mind_armor, int damage, weapon weapon, clothes head_clothes, clothes body_clothes, clothes legs_clothes) {
         this.xp = xp;
         this.mind = mind;
@@ -69,6 +99,8 @@ public class avatar {
         int difference = MAX_xp - xp;
         if (difference > heal) {
             xp = xp + heal;
+            someTextHelper.setText("Вы находитесь на своей базе, выберите куда вы пойдёте сейчас:");
+            textsLayout.addView(someTextHelper);
             System.out.println("Вы восстановили " + heal + " едениц здоровья " + xp + "/" + MAX_xp);
         } else {
             xp = MAX_xp;

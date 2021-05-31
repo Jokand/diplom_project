@@ -22,16 +22,60 @@ public class MainActivity extends AppCompatActivity {
         someTextHelper = new TextView(getApplicationContext());
         textsLayout = findViewById(R.id.linearLayoutText);
         buttonsLayout = findViewById(R.id.linearLayoutButton);
-        location living_spaces = new location("Жилые помещения", "a"), kitchen = new location("Кухня", "б"),
-                hospital = new location("Больница", "в"), engine_room = new location("Машинное отделение", "г"),
-                warehouse = new location("Склад", "д");
+
+        item heal_body = new item("Аптечка", 5, 1);
+        item heal_mind = new item("Книга", 5, 2);
+        item damage_enemy= new item("Обрез", 10, 3);
+
+        weapon arms = new weapon("кулаки", 1, "Тупа кулаки");
+        weapon knife = new weapon("Нож", 3, "Ножик делает вжик вжик");
+        clothes cap = new clothes("Кепка", "Морская кепка", 0, 1,3);
+        clothes T_shirt = new clothes("Футболка", "Простая тряпичная фу", 0, 1,2);
+        clothes shorts = new clothes("Шортики", "Короткие сексуальные шортики", 1, 0,1);
+        clothes helmet = new clothes("щлем", "железный шлем", 1, 2,3);
+        clothes bulletproof_vest = new clothes("Броник", "Непробиваемая штука", 4, 1,2);
+        clothes trousers = new clothes("Штаны", "Штаны из берёзовой коры", 2, 1,1);
+        enemy Enemy_1 = new enemy("Культист", 15, 12, 4, 6, 100, 60, 10, 5);
+        enemy Enemy_2 = new enemy("Фанатик", 10, 13, 5, 4, 100, 50, 10, 5);
+        enemy Enemy_3 = new enemy("Зомби", 20, 10, 3, 4, 100, 70, 2, 1);
+        ArrayList<enemy> enemis = new ArrayList<>();
+        enemis.add(Enemy_1); enemis.add(Enemy_2); enemis.add(Enemy_3);
+
+        ArrayList<Object> loots = new ArrayList<>();
+        loots.add(heal_body); loots.add(heal_mind); loots.add(damage_enemy); loots.add(knife); loots.add(helmet); loots.add(bulletproof_vest);  loots.add(trousers);
+
+        ArrayList<String> false_answer = new ArrayList<>();
+        false_answer.add("Десять");
+        false_answer.add("Пять");
+        false_answer.add("Восемь");
+        false_answer.add("Двенадцать");
+        false_answer.add("Сороктри");
+        location.event one = new location.event("Два", false_answer, "1 + 1");
+        location.event two = new location.event("Четыре", false_answer, "2 + 2");
+        location.event three = new location.event("3", false_answer, "2 + 1");
+        location.event four = new location.event("Пятнадцать", false_answer, "3 * 5");
+        location.event five = new location.event("Сорокчетыре", false_answer, "4 + 4 на js");
+        location.event six = new location.event("Двадцать", false_answer, "5 * 4");
+        location.event seven = new location.event("Восемнадцать", false_answer, "3 * 3 * 2");
+
+        ArrayList<location.event> events = new ArrayList<location.event>();
+        events.add(one); events.add(two); events.add(three); events.add(four); events.add(five); events.add(six);  events.add(seven);
+
+        location
+                living_spaces = new location("Жилые помещения", "a", loots, events, enemis),
+                kitchen = new location("Кухня", "б", loots, events, enemis),
+                hospital = new location("Больница", "в", loots, events, enemis),
+                engine_room = new location("Машинное отделение", "г", loots, events, enemis),
+                warehouse = new location("Склад", "д", loots, events, enemis);
+
         ArrayList<location> locations = new ArrayList<>();
         locations.add(living_spaces);
         locations.add(kitchen);
         locations.add(hospital);
         locations.add(engine_room);
         locations.add(warehouse);
-        avatar hero = new avatar(20, 30, 10, 10, 4, null, null, null, null);
+        avatar hero = new avatar(20, 30, 10, 10, 4, arms, cap, T_shirt, shorts);
+
         //ButtonsHelper helper = new ButtonsHelper(getApplicationContext());
         TextView someTextHelper = new TextView(getApplicationContext());
         String logo = "Приветствие игрока, ввод в курс дела. После приветствия перед игроком описывается база и концепция вылазок глазами главного героя.";
@@ -39,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         textsLayout.addView(someTextHelper);
         buttonsLayout.addView(getStartButton(locations, hero));
     }
+
+
 
     public Button getStartButton(ArrayList<location> locations, avatar hero){
         Button btn = new Button(getApplicationContext());
@@ -49,7 +95,18 @@ public class MainActivity extends AppCompatActivity {
 //            System.out.println(textsLayout);
 //            System.out.println(someTextHelper);
             //textsLayout.addView(someTextHelper);
-            //buttonsLayout.addView(getWaitingButton("Сидеть и ждать", hero));
+//            buttonsLayout.addView(getWaitingButton("Сидеть и ждать", hero));
+            Button WaitingButton = new Button(getApplicationContext());
+            WaitingButton.setText("Сидеть и ждать");
+            WaitingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ritual_counter--;
+                    hero.avatar_healing_xp(5);
+                    hero.avatar_healing_mind(2);
+                }
+            });
+            buttonsLayout.addView(WaitingButton);
             for (int i = 0; i < locations.size(); i++) {
                 Button b = new Button(getApplicationContext());
                 b.setText(locations.get(i).name);
@@ -82,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                         if (finalI < locations.size()) {
                             if (locations.get(finalI).exploration(hero)) {
                                 btn.setText("Вы проиграли");
+                                textsLayout.addView(someTextHelper);
                             } else MainActivity.ritual_counter--;
                         }
                     }
