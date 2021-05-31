@@ -1,5 +1,9 @@
 package com.example.diplomjava;
 
+import android.annotation.SuppressLint;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -10,35 +14,9 @@ public class avatar {
     weapon weapon;
     clothes head_clothes, body_clothes, legs_clothes;
 
-    TextView numeralInput;
+    LinearLayout textsLayout, buttonsLayout;
+    TextView someTextHelper;
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_main);
-        numeralInput = (TextView) findViewById(R.id.textView);
-
-        convert.setOnClickListener(
-                new View.OnClickListener() {
-                    public void onClick(View v) {
-
-                        String intValue = numeralInput.getText().toString();
-                        try{
-                            int integer = Integer.parseInt(intValue);
-                            if (integer > 0 && integer <= 4999){
-                                translator(integer);
-
-                            }else{
-                                numeralInput.setText("Please enter an integer between 0 and 4,999.");
-                            }
-
-                        }catch(NumberFormatException e){
-                            numeralInput.setText("Invalid input try again.");
-                        }
-                    }
-                }
-        );
 
     public avatar(int xp, int mind, int armor, int mind_armor, int damage, weapon weapon, clothes head_clothes, clothes body_clothes, clothes legs_clothes) {
         this.xp = xp;
@@ -86,36 +64,32 @@ public class avatar {
         return new Random().nextInt(21)+ weapon.bonus_damage;
     }
 
-    void avatar_review(){
-        System.out.println("Физическое здоровье: " + xp + ", Ментальное здоровье: " + mind + "\n" + "Защита тела равна: " + const_armor + ", Защита разума равна: " + const_armor_mind + "\n" + "Экипированное снаряжение: " + "\n" + "Экипированное оружие:");
-        weapon.weapon_review();
-        System.out.println("Экипированная броня:");
-        head_clothes.clothes_review();
-        body_clothes.clothes_review();
-        legs_clothes.clothes_review();
+    @SuppressLint("SetTextI18n")
+    String avatar_review(){
+        return ("\n Физическое здоровье: " + xp + ", Ментальное здоровье: " + mind + "\n" +
+                "Защита тела равна: " + const_armor + ", Защита разума равна: " + const_armor_mind + "\n" +
+                "\n" + "Экипированное оружие:" + "\n" + weapon.weapon_review() + "\n" + "\n" +  "Экипированная броня:" + "\n"
+                + head_clothes.clothes_review()+ "\n" + "\n" + body_clothes.clothes_review() + "\n" + "\n" + legs_clothes.clothes_review());
     }
 
-    void avatar_healing_xp(int heal) {
+    String avatar_healing_xp(int heal) {
         int difference = MAX_xp - xp;
         if (difference > heal) {
             xp = xp + heal;
-            someTextHelper.setText("Вы находитесь на своей базе, выберите куда вы пойдёте сейчас:");
-            textsLayout.addView(someTextHelper);
-            System.out.println("Вы восстановили " + heal + " едениц здоровья " + xp + "/" + MAX_xp);
+            return new String("Вы восстановили " + heal + " едениц здоровья " + xp + "/" + MAX_xp);
         } else {
             xp = MAX_xp;
-            System.out.println("Вы полностью восстановили здоровье " + xp + "/" + MAX_xp);
+            return new String("Вы полностью восстановили здоровье " + xp + "/" + MAX_xp);
         }
     }
-
-    void avatar_healing_mind(int mind_heal) {
+    String avatar_healing_mind(int mind_heal) {
         int difference = MAX_mind - mind;
         if (difference > mind_heal) {
             mind = mind + mind_heal;
-            System.out.println("Вы восстановили " + mind_heal + " едениц ментального здоровья " + mind + "/" + MAX_mind);
+            return new String("Вы восстановили " + mind_heal + " едениц ментального здоровья " + mind + "/" + MAX_mind);
         } else {
-            mind = MAX_mind;
-            System.out.println("Вы полностью восстановили ментальное здоровье " + mind + "/" + MAX_mind);
+            xp = MAX_xp;
+            return new String("Вы полностью восстановили ментальное здоровье " + mind + "/" + MAX_mind);
         }
     }
 }

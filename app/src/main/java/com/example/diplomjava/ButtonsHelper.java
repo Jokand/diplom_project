@@ -73,7 +73,6 @@ public class ButtonsHelper extends AppCompatActivity {
                                 return;
                             } else MainActivity.ritual_counter--;
                         }
-
                     }
                 });
 //            ((LinearLayout) findViewById(R.id.layout)).addView(b);
