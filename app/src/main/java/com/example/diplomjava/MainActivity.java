@@ -175,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
                     if (finalI < locations.size()) {
                         textsLayout.removeView(someTextHelper);
                         someTextHelper.setText(location.exploration(hero));
+                        enemy this_enemy = enemy_in_location.get(new Random().nextInt(enemy_in_location.size()));
+                        int result_duel = fight(this_enemy, hero);//1 - поражение 2 - победа 3 - побег
                         textsLayout.addView(someTextHelper);
 //                        if (locations.get(finalI).exploration(hero)) {
 //                            btn.setText("Вы проиграли");
@@ -183,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             });
+            location exploration;
             //((LinearLayout) findViewById(R.id.layout)).addView(b);
             buttonsLayout.addView(b);
         }
