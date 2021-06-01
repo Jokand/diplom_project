@@ -317,6 +317,8 @@ public class MainActivity extends AppCompatActivity {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onClick(View v) {
+                    hero.stop_effect_defense();
+                    hero.stop_effect_defense_mind();
                     textsLayout.removeView(someTextHelper);
                     int hit = hero.avatar_hit();
                     if ((hit > Enemy.armor) && (Enemy.xp > 0)) {
