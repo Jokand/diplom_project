@@ -301,4 +301,194 @@ public class MainActivity extends AppCompatActivity {
         });
         return btn;
     }
+
+
+    @SuppressLint("SetTextI18n")
+    int fight(enemy Enemy, avatar hero, ArrayList location){
+        boolean const_defence_avatar = false, const_defence_mind_avatar = false, const_defence_enemy = false;
+        int count_defence_enemy = 0, result_defeat = 0;
+        hero.armor = hero.const_armor;
+        hero.mind_armor = hero.const_armor_mind;
+//        while (Enemy.xp > 0 && hero.xp > 0 && hero.mind > 0) {
+
+            Button attack = new Button(getApplicationContext());
+            attack.setText("Атаковать");
+            attack.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onClick(View v) {
+                    textsLayout.removeView(someTextHelper);
+                    int hit = hero.avatar_hit();
+                    if ((hit > Enemy.armor) && (Enemy.xp > 0)) {
+                        Enemy.xp -= hero.avatar_attack();
+                        someTextHelper.setText("Вы ранили " + Enemy.name + ". Теперь у него осталось " + Enemy.xp + "/" + Enemy.MAX_xp);
+                    } else if (hit <= Enemy.armor) {
+                        someTextHelper.setText("Вы не попали по " + Enemy.name + ". " + Enemy.xp + "/" + Enemy.MAX_xp);
+                    }
+                    textsLayout.addView(someTextHelper);
+                }
+            });
+            buttonsLayout.addView(attack);
+            Button defence = new Button(getApplicationContext());
+            defence.setText("Защищаться");
+            defence.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onClick(View v) {
+                    textsLayout.removeView(someTextHelper);
+                    someTextHelper.setText("Выберите что будете защищать:");
+                    textsLayout.addView(someTextHelper);
+                    Button defenceBody = new Button(getApplicationContext());
+                    defenceBody.setText("Повысить защиту тела");
+                    defenceBody.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            hero.defense();
+                            textsLayout.removeView(someTextHelper);
+                            someTextHelper.setText("Вы встали в защитную стойку. Ваша защита была повышена на 2 еденицы. Ваша защита теперь равна " + hero.armor + ".");
+                            textsLayout.addView(someTextHelper);
+                        }
+                    });
+                    Button defenceMind = new Button(getApplicationContext());
+                    defenceMind.setText("Повысить защиту разума");
+                    defenceMind.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            hero.defense_mind();
+                            textsLayout.removeView(someTextHelper);
+                            someTextHelper.setText("Вы отчистили свой разум. Ваша ментальная защита была повышена на 2 еденицы. Ваша ментальная защита теперь равна " + hero.mind_armor + ".");
+                            textsLayout.addView(someTextHelper);
+                        }
+                    });
+                    buttonsLayout.addView(defenceBody);
+                    buttonsLayout.addView(defenceMind);
+                }
+            });
+            buttonsLayout.addView(defence);
+
+
+            Button useItems = new Button(getApplicationContext());
+            useItems.setText("Использовать предмет");
+            useItems.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (hero.inventory.size() == 0) {
+                        textsLayout.removeView(someTextHelper);
+                        someTextHelper.setText("Инвентарь пуст");
+                        textsLayout.addView(someTextHelper);
+                    }
+                    for (int i = 0; i < hero.inventory.size(); i++) {
+                        Button btn = new Button(getApplicationContext());
+                        int inventory_vote = i;
+                        btn.setText(hero.inventory.get(i).name);
+                        btn.setOnClickListener(new View.OnClickListener() {
+                            @SuppressLint("SetTextI18n")
+                            @Override
+                            public void onClick(View v) {
+                                textsLayout.removeView(someTextHelper);
+                                if (hero.inventory.get(inventory_vote).what_heals == 1) {
+                                    hero.avatar_healing_xp(hero.inventory.get(inventory_vote).amount_of_treatment);
+                                    someTextHelper.setText("Вы использовали " + hero.inventory.get(inventory_vote + 1).name + " и восстановили " +
+                                            hero.inventory.get(inventory_vote).amount_of_treatment + " xp");
+                                } else if (hero.inventory.get(inventory_vote).what_heals == 2) {
+                                    hero.avatar_healing_mind(hero.inventory.get(inventory_vote).amount_of_treatment);
+                                    someTextHelper.setText("Вы использовали " + hero.inventory.get(inventory_vote + 1).name + " и восстановили " +
+                                            hero.inventory.get(inventory_vote).amount_of_treatment + " очков ментального здоровья");
+                                } else {
+                                    Enemy.xp -= hero.inventory.get(inventory_vote).amount_of_treatment;
+                                    someTextHelper.setText("Вы использовали " + hero.inventory.get(inventory_vote + 1).name + " ранили своего противника на  " +
+                                            hero.inventory.get(inventory_vote).amount_of_treatment + " урона.");
+                                }
+                                textsLayout.addView(someTextHelper);
+                                hero.inventory.remove(inventory_vote);
+                            }
+                        });
+                        buttonsLayout.addView(btn);
+                    }
+
+                    Button goToBack = new Button(getApplicationContext());
+                    goToBack.setText("Назад");
+                    goToBack.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            fight(Enemy, hero, location);
+                        }
+                    });
+                    buttonsLayout.addView(goToBack);
+                }
+            });
+        buttonsLayout.addView(useItems);
+
+        Button runningOnFight = new Button(getApplicationContext());
+        runningOnFight.setText("Убежать");
+        int result_run = result_defeat;
+        runningOnFight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textsLayout.removeView(someTextHelper);
+                someTextHelper.setText("Вы сбежали с поля боя");
+                textsLayout.addView(someTextHelper);
+                lobby(hero, location);
+                //return result_run;
+            }
+        });
+        buttonsLayout.addView(runningOnFight);
+        Button reviewHero = new Button(getApplicationContext());
+        reviewHero.setText("Убежать");
+        reviewHero.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textsLayout.removeView(someTextHelper);
+                someTextHelper.setText(hero.avatar_review());
+                textsLayout.addView(someTextHelper);
+                fight(Enemy, hero, location);
+            }
+        });
+        buttonsLayout.addView(reviewHero);
+
+
+        if (Enemy.xp <= 0) {
+            textsLayout.removeView(someTextHelper);
+            someTextHelper.setText("Вы убили своего противника " + Enemy.name + ".");
+            textsLayout.addView(someTextHelper);
+            result_defeat = 2;
+        }
+
+        int enemyAttack = new Random().nextInt(101);
+        if (count_defence_enemy == 2) {
+            Enemy.stop_effect_defense();
+            count_defence_enemy = 0;
+            const_defence_enemy = false;
+        } else if (const_defence_enemy) count_defence_enemy++;
+
+        if (enemyAttack < Enemy.bodyDamagePercent && enemyAttack > Enemy.mindDamagePercent) {
+            int hit = Enemy.enemy_hit();
+            textsLayout.removeView(someTextHelper);
+            if ((hit > hero.armor) && (hero.xp > 0)) {
+                hero.xp -= Enemy.attack();
+                someTextHelper.setText("Вас ранил " + Enemy.name + ". Теперь у вас осталось " + hero.xp + "/" + hero.MAX_xp);
+            } else{
+                someTextHelper.setText("Меня ударили, но не пробили броню." + hero.xp + "/" + hero.MAX_xp);
+            }
+            textsLayout.addView(someTextHelper);
+        } else if (enemyAttack < Enemy.bodyDamagePercent && enemyAttack > Enemy.defencePercent) {
+            int hit = Enemy.enemy_hit();
+            textsLayout.removeView(someTextHelper);
+            if ((hit > hero.mind_armor) && (hero.mind > 0)) {
+                hero.mind -= Enemy.attack_mind();
+                someTextHelper.setText("Ваш разум повредил " + Enemy.name + ". Теперь у вас осталось " + hero.mind + "/" + hero.MAX_mind);
+            } else{
+                someTextHelper.setText("Меня ударили, но не пробили ментальную броню." + hero.mind + "/" + hero.MAX_mind);
+            }
+            textsLayout.addView(someTextHelper);
+        } else {
+            Enemy.defense();
+            const_defence_enemy = true;
+            textsLayout.removeView(someTextHelper);
+            someTextHelper.setText(Enemy.name + " усилил защиту " + Enemy.armor);
+            textsLayout.addView(someTextHelper);
+        }
+        //}
+        return result_defeat;//1 - поражение 2 - победа 3 - побег
+    }
 }
