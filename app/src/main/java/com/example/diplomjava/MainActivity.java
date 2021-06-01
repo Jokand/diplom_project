@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
     public static int ritual_counter = 15;
@@ -64,14 +66,14 @@ public class MainActivity extends AppCompatActivity {
         false_answer.add("Восемь");
         false_answer.add("Двенадцать");
         false_answer.add("Сороктри");
-        location.event one = new location.event("Два", false_answer, "1 + 1"),
-                two = new location.event("Четыре", false_answer, "2 + 2"),
-                three = new location.event("3", false_answer, "2 + 1"),
-                four = new location.event("Пятнадцать", false_answer, "3 * 5"),
-                five = new location.event("Сорокчетыре", false_answer, "4 + 4 на js"),
-                six = new location.event("Двадцать", false_answer, "5 * 4"),
-                seven = new location.event("Восемнадцать", false_answer, "3 * 3 * 2");
-        ArrayList<location.event> events = new ArrayList<location.event>();
+        event one = new event("Два", false_answer, "1 + 1"),
+                two = new event("Четыре", false_answer, "2 + 2"),
+                three = new event("3", false_answer, "2 + 1"),
+                four = new event("Пятнадцать", false_answer, "3 * 5"),
+                five = new event("Сорокчетыре", false_answer, "4 + 4 на js"),
+                six = new event("Двадцать", false_answer, "5 * 4"),
+                seven = new event("Восемнадцать", false_answer, "3 * 3 * 2");
+        ArrayList<event> events = new ArrayList<event>();
         events.add(one);
         events.add(two);
         events.add(three);
@@ -159,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < locations.size(); i++) {
             Button b = new Button(getApplicationContext());
             b.setText(locations.get(i).name);
-            int finalI = i - 1;
+            int finalI = i;
             if (i == 0) {
                 btn.setText("Выбор брони и оружия перед вылазкой");
                 btn.setOnClickListener(v1 -> {
@@ -171,10 +173,13 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (finalI < locations.size()) {
-                        if (locations.get(finalI).exploration(hero)) {
-                            btn.setText("Вы проиграли");
-                            textsLayout.addView(someTextHelper);
-                        } else MainActivity.ritual_counter--;
+                        textsLayout.removeView(someTextHelper);
+                        someTextHelper.setText(location.exploration(hero));
+                        textsLayout.addView(someTextHelper);
+//                        if (locations.get(finalI).exploration(hero)) {
+//                            btn.setText("Вы проиграли");
+//                            textsLayout.addView(someTextHelper);
+//                        } else MainActivity.ritual_counter--;
                     }
                 }
             });
@@ -190,6 +195,45 @@ public class MainActivity extends AppCompatActivity {
 //                recreate();
 //            });
 //        }
+    }
+
+    public class event{
+        String description;
+        String true_answer;
+        ArrayList<String> false_answer;
+        public event(String true_answer, ArrayList<String> false_answer, String description) {
+            this.true_answer = true_answer;
+            this.false_answer = false_answer;
+            this.description = description;
+        }
+        @SuppressLint("SetTextI18n")
+        void issuing_an_event(avatar hero){
+            int position_of_the_true_answer = new Random().nextInt(false_answer.size());
+            false_answer.add(position_of_the_true_answer, true_answer);
+            someTextHelper.setText(description);
+            textsLayout.removeView(someTextHelper);
+            textsLayout.addView(someTextHelper);
+            for (int i = 0; i < false_answer.size()+1; i++) {
+                Button btn = new Button(getApplicationContext());
+                btn.setText(false_answer.get(i));
+                int finalI = i;
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(position_of_the_true_answer==finalI){
+                            false_answer.remove(position_of_the_true_answer);
+                            someTextHelper.setText("Вы правильно решили задачу\n" + location.giving_out_loot(hero));
+                            textsLayout.addView(someTextHelper);
+                        }else{
+                            false_answer.remove(position_of_the_true_answer);
+                            someTextHelper.setText("Вы неправильно решили задачу и довольно сильно нашумели. Теперь вам нужно быстро убегать");
+                            textsLayout.addView(someTextHelper);
+                        }
+                    }
+                });
+                buttonsLayout.addView(btn);
+            }
+        }
     }
 
 
