@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.example.diplomjava.locationClass.exploration;
+import static com.example.diplomjava.locationClass.giving_out_loot;
+
 public class MainActivity extends AppCompatActivity {
     public static int ritual_counter = 15;
     LinearLayout textsLayout, buttonsLayout;
