@@ -1,15 +1,8 @@
 package com.example.diplomjava;
 
-import android.annotation.SuppressLint;
-import android.view.View;
-import android.widget.Button;
-
 import com.example.diplomjava.MainActivity.event;
-
-import java.net.CookieHandler;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class locationClass{
 
@@ -27,7 +20,7 @@ public class locationClass{
         this.enemy_in_location = enemy_in_location;
     }
 
-    String giving_out_loot(avatar hero){
+    public String giving_out_loot(avatar hero){
         String lootOne = "";
         String lootTwo = "Всякий мусор";
         Object Added_item = loot.get(new Random().nextInt(loot.size()));
@@ -60,7 +53,6 @@ public class locationClass{
     void exploration(avatar hero, ArrayList locations) {
         int chance_exploration = new Random().nextInt(11);
         MainActivity.ritual_counter--;
-
         if(chance_exploration<3){
             giving_out_loot(hero);
         } else if(3<chance_exploration && chance_exploration<6){
