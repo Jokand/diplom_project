@@ -18,22 +18,15 @@ public class locationClass {
         this.enemy_in_location = enemy_in_location;
     }
 
-    static String exploration(avatar hero) {
+     Object exploration(avatar hero) {
         int chance_exploration = new Random().nextInt(11);
         MainActivity.ritual_counter--;
         if(chance_exploration<3){
-            giving_out_loot(hero);
-        } else if(3<chance_exploration && chance_exploration<6){
-            MainActivity.event this_event = events.get(new Random().nextInt(events.size()));
-            this_event.issuing_an_event(hero);
             return giving_out_loot(hero);
+        } else if(3<chance_exploration && chance_exploration<6){
+            return events.get(new Random().nextInt(events.size()));
         } else {
-            enemy this_enemy = enemy_in_location.get(new Random().nextInt(enemy_in_location.size()));
-            int result_duel = fight(this_enemy, hero);//1 - поражение 2 - победа 3 - побег
-            if (result_duel == 1) {
-                return true;
-            } else if (result_duel == 2)
-                giving_out_loot(hero);
+            return enemy_in_location.get(new Random().nextInt(enemy_in_location.size()));
         }
     }
 

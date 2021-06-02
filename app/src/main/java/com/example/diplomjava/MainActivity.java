@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static com.example.diplomjava.locationClass.exploration;
 import static com.example.diplomjava.locationClass.giving_out_loot;
 
 public class MainActivity extends AppCompatActivity {
@@ -170,9 +169,25 @@ public class MainActivity extends AppCompatActivity {
                     if (finalI < locations.size()) {
                         textsLayout.removeView(someTextHelper);
                         someTextHelper.setText("Вы пошли исследовать " + locations.get(finalI).name);
-                        exploration(hero);//1 - поражение 2 - победа 3 - побег
-
+                        Object vote = locations.get(finalI).exploration(hero); //1 - поражение 2 - победа 3 - побег
                         textsLayout.addView(someTextHelper);
+
+                        if (vote instanceof event) {
+                            event vote1 = (event) vote;
+                            vote1.issuing_an_event(hero);
+                            giving_out_loot(hero);
+                        }else if(vote instanceof enemy) {
+                            enemy vote1 = (enemy) vote;
+                            fight(vote1, hero, locations);
+                            giving_out_loot(hero);
+                        }else if(vote instanceof String) {
+                            String vote1 = (String) vote;
+                            textsLayout.removeView(someTextHelper);
+                            someTextHelper.setText(vote1);
+                            textsLayout.addView(someTextHelper);
+                        }
+
+
                     }
                 }
             });
@@ -205,20 +220,21 @@ public class MainActivity extends AppCompatActivity {
             someTextHelper.setText(description);
             textsLayout.removeView(someTextHelper);
             textsLayout.addView(someTextHelper);
-            for (int i = 0; i < false_answer.size()+1; i++) {
+            for (int i = 0; i < false_answer.size(); i++) {
                 Button btn = new Button(getApplicationContext());
                 btn.setText(false_answer.get(i));
                 int finalI = i;
                 btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        textsLayout.removeView(someTextHelper);
                         if(position_of_the_true_answer==finalI){
                             false_answer.remove(position_of_the_true_answer);
-                            someTextHelper.setText("Вы правильно решили задачу\n" + giving_out_loot(hero));
+                            someTextHelper.setText("Вы правильно решили задачу\n");
                             textsLayout.addView(someTextHelper);
                         }else{
                             false_answer.remove(position_of_the_true_answer);
-                            someTextHelper.setText("Вы неправильно решили задачу и довольно сильно нашумели. Теперь вам нужно быстро убегать");
+                            someTextHelper.setText("Вы неправильно решили задачу и довольно сильно нашумели. Теперь вам нужно быстро убегать\n");
                             textsLayout.addView(someTextHelper);
                         }
                     }
@@ -328,6 +344,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void fight(enemy Enemy, avatar hero, ArrayList locations){
+        buttonsLayout.removeAllViews();
         hero.armor = hero.const_armor;
         hero.mind_armor = hero.const_armor_mind;
         Button attack = new Button(getApplicationContext());
@@ -456,7 +473,7 @@ public class MainActivity extends AppCompatActivity {
         });
         buttonsLayout.addView(runningOnFight);
         Button reviewHero = new Button(getApplicationContext());
-        reviewHero.setText("Убежать");
+        reviewHero.setText("Осмотреть себя");
         reviewHero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
