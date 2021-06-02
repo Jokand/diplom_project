@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -168,7 +170,8 @@ public class MainActivity extends AppCompatActivity {
                     if (finalI < locations.size()) {
                         textsLayout.removeView(someTextHelper);
                         someTextHelper.setText("Вы пошли исследовать " + locations.get(finalI).name);
-                        //exploration(); //1 - поражение 2 - победа 3 - побег
+                        exploration(hero);//1 - поражение 2 - победа 3 - побег
+
                         textsLayout.addView(someTextHelper);
                     }
                 }
@@ -186,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public class event{
+    public  class event{
         String description;
         String true_answer;
         ArrayList<String> false_answer;
