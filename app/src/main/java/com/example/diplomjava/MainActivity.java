@@ -17,13 +17,15 @@ import static com.example.diplomjava.locationClass.giving_out_loot;
 public class MainActivity extends AppCompatActivity {
     public static int ritual_counter = 15;
     LinearLayout textsLayout, buttonsLayout;
-    TextView someTextHelper, WaitingText;
+    TextView someTextHelper, fightAvatarText, fightEnemyText, WaitingText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_field);
         someTextHelper = new TextView(getApplicationContext());
+        fightAvatarText = new TextView(getApplicationContext());
+        fightEnemyText = new TextView(getApplicationContext());
         WaitingText = new TextView(getApplicationContext());
         textsLayout = findViewById(R.id.linearLayoutText);
         buttonsLayout = findViewById(R.id.linearLayoutButton);
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     void lobby(avatar hero, ArrayList<locationClass> locations) {
         buttonsLayout.removeAllViews();
+        textsLayout.removeAllViews();
         someTextHelper.setText("Вы находитесь на своей базе, выберите куда вы пойдёте сейчас: \n" +" До окончания призыва осталось: " + ritual_counter);
         textsLayout.removeView(someTextHelper);
         textsLayout.addView(someTextHelper);
@@ -344,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void fight(enemy Enemy, avatar hero, ArrayList locations){
+        textsLayout.removeAllViews();
         buttonsLayout.removeAllViews();
         hero.armor = hero.const_armor;
         hero.mind_armor = hero.const_armor_mind;
