@@ -1,5 +1,9 @@
 package com.example.diplomjava;
 
+import android.annotation.SuppressLint;
+import android.view.View;
+import android.widget.Button;
+
 import com.example.diplomjava.MainActivity.event;
 
 import java.net.CookieHandler;
@@ -7,43 +11,23 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class location{
+public class locationClass{
+
     String name;
     String description;
-    static ArrayList<Object> loot;
-    ArrayList<MainActivity.event> events;
+    ArrayList<Object> loot;
+    ArrayList<event> events;
     ArrayList<enemy> enemy_in_location;
-    Scanner cin = new Scanner(System.in);
-    public location(String name, String description, ArrayList<Object> loot, ArrayList<MainActivity.event> event, ArrayList<enemy> enemy_in_location) {
+
+    public locationClass(String name, String description, ArrayList<Object> loot, ArrayList<MainActivity.event> events, ArrayList<enemy> enemy_in_location) {
         this.name = name;
         this.description = description;
         this.loot = loot;
         this.events = events;
         this.enemy_in_location = enemy_in_location;
     }
-    static String exploration(avatar hero) {
-        int chance_exploration = new Random().nextInt(11);
-        MainActivity.ritual_counter--;
 
-//        if(chance_exploration<3){
-//            giving_out_loot(hero);
-//        } else if(3<chance_exploration && chance_exploration<6){
-
-//        event this_event = events.get(new Random().nextInt(events.size()));
-//        this_event.issuing_an_event(hero);
-        return giving_out_loot(hero);
-//        } else {
-//           enemy this_enemy = enemy_in_location.get(new Random().nextInt(enemy_in_location.size()));
-//            int result_duel = fight(this_enemy, hero);//1 - поражение 2 - победа 3 - побег
-//            if (result_duel == 1) {
-//                return true;
-//            } else if (result_duel == 2)
-//                giving_out_loot(hero);
-//        }
-    }
-
-
-    static String giving_out_loot(avatar hero){
+    String giving_out_loot(avatar hero){
         String lootOne = "";
         String lootTwo = "Всякий мусор";
         Object Added_item = loot.get(new Random().nextInt(loot.size()));
@@ -72,4 +56,20 @@ public class location{
         }
         return("Вы порылись в ящиках и нашли некоторые вещи:\n" + lootOne + " и "+ lootTwo);
     }
+
+    void exploration(avatar hero, ArrayList locations) {
+        int chance_exploration = new Random().nextInt(11);
+        MainActivity.ritual_counter--;
+
+        if(chance_exploration<3){
+            giving_out_loot(hero);
+        } else if(3<chance_exploration && chance_exploration<6){
+            event this_event = (event) events.get(new Random().nextInt(events.size()));
+            this_event.issuing_an_event(hero);
+        } else {
+            enemy this_enemy = (enemy) enemy_in_location.get(new Random().nextInt(enemy_in_location.size()));
+            fight(this_enemy, hero, locations);//1 - поражение 2 - победа 3 - побег
+        }
+    }
 }
+

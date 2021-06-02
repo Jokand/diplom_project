@@ -40,4 +40,6 @@ public class enemy {
     int enemy_hit() {
         return new Random().nextInt(19) + 1 + attack_modifier;
     }
+
+
 }
