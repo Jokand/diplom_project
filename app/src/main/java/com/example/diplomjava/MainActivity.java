@@ -462,15 +462,15 @@ public class MainActivity extends AppCompatActivity {
                     textsLayout.removeView(someTextHelper);
                     if (hero.inventory.get(inventory_vote).what_heals == 1) {
                         hero.avatar_healing_xp(hero.inventory.get(inventory_vote).amount_of_treatment);
-                        someTextHelper.setText("Вы использовали " + hero.inventory.get(inventory_vote + 1).name + " и восстановили " +
+                        someTextHelper.setText("Вы использовали " + hero.inventory.get(inventory_vote).name + " и восстановили " +
                                 hero.inventory.get(inventory_vote).amount_of_treatment + " xp");
                     } else if (hero.inventory.get(inventory_vote).what_heals == 2) {
                         hero.avatar_healing_mind(hero.inventory.get(inventory_vote).amount_of_treatment);
-                        someTextHelper.setText("Вы использовали " + hero.inventory.get(inventory_vote + 1).name + " и восстановили " +
+                        someTextHelper.setText("Вы использовали " + hero.inventory.get(inventory_vote).name + " и восстановили " +
                                 hero.inventory.get(inventory_vote).amount_of_treatment + " очков ментального здоровья");
                     } else {
                         Enemy.xp -= hero.inventory.get(inventory_vote).amount_of_treatment;
-                        someTextHelper.setText("Вы использовали " + hero.inventory.get(inventory_vote + 1).name + " ранили своего противника на  " +
+                        someTextHelper.setText("Вы использовали " + hero.inventory.get(inventory_vote).name + " ранили своего противника на  " +
                                 hero.inventory.get(inventory_vote).amount_of_treatment + " урона.");
                     }
                     textsLayout.addView(someTextHelper);
