@@ -158,34 +158,34 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < locations.size(); i++) {
             Button b = new Button(getApplicationContext());
             b.setText(locations.get(i).name);
-            finalI = i;
             if (i == 0) {
                 btn.setText("Выбор брони и оружия перед вылазкой");
                 btn.setOnClickListener(v1 -> selectAvailableEquipment(hero, locations));
                 buttonsLayout.addView(btn);
             }
+            int finalI1 = i;
             b.setOnClickListener(v -> {
-                if (finalI < locations.size()) {
+                finalI = finalI1;
+                textsLayout.removeView(someTextHelper);
+                someTextHelper.setText("Вы пошли исследовать " + locations.get(finalI).name);
+                Object vote = locations.get(finalI).exploration(hero); //1 - поражение 2 - победа 3 - побег
+                textsLayout.addView(someTextHelper);
+                if (vote instanceof event) {
+                    event vote1 = (event) vote;
+                    vote1.issuing_an_event(hero, locations);
+                    locations.get(finalI).giving_out_loot(hero);
+                }else if(vote instanceof enemy) {
+                    enemy vote1 = (enemy) vote;
+                    someTextHelper.setText(vote1.name + " встретился вам в одном из помещений. Он угрожающе двигается на вас и готовиться атаковать.");
+                    fight(vote1, hero, locations);
+                    locations.get(finalI).giving_out_loot(hero);
+                }else if(vote instanceof String) {
+                    String vote1 = (String) vote;
                     textsLayout.removeView(someTextHelper);
-                    someTextHelper.setText("Вы пошли исследовать " + locations.get(finalI).name);
-                    Object vote = locations.get(finalI).exploration(hero); //1 - поражение 2 - победа 3 - побег
+                    someTextHelper.setText(vote1);
                     textsLayout.addView(someTextHelper);
-                    if (vote instanceof event) {
-                        event vote1 = (event) vote;
-                        vote1.issuing_an_event(hero, locations);
-                        locations.get(finalI).giving_out_loot(hero);
-                    }else if(vote instanceof enemy) {
-                        enemy vote1 = (enemy) vote;
-                        someTextHelper.setText(vote1.name + " встретился вам в одном из помещений. Он угрожающе двигается на вас и готовиться атаковать.");
-                        fight(vote1, hero, locations);
-                        locations.get(finalI).giving_out_loot(hero);
-                    }else if(vote instanceof String) {
-                        String vote1 = (String) vote;
-                        textsLayout.removeView(someTextHelper);
-                        someTextHelper.setText(vote1);
-                        textsLayout.addView(someTextHelper);
-                    }
                 }
+
             });
             buttonsLayout.addView(b);
         }
@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
                 textsLayout.removeAllViews();
                 buttonsLayout.removeAllViews();
                 if(Enemy == locations.get(5).enemy_in_location.get(0)){
-                    gameOver(hero, "Вы ВЫЙГРАЛИ!");
+                    gameOver(hero, "Убив капитана субмарины вы смогли остановить ритуал призыва.\n Вы Победили!");
                 } else {
                     someTextHelper.setText("Вы победили противника и смогли хорошо исследовать место \n" + locations.get(finalI).giving_out_loot(hero));
                     textsLayout.addView(someTextHelper);
