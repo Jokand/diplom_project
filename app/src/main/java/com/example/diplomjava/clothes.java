@@ -1,8 +1,5 @@
 package com.example.diplomjava;
 
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 public class clothes {
     String description, name;
     int armor_class, mind_armor_class, place_of_protection; // place_of_protection 1 - leg, 2 - body, 3 - head

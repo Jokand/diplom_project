@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class enemy {
     String name;
-    int bodyDamagePercent, mindDamagePercent, defencePercent;
+    int mindDamagePercent, defencePercent;
     int xp, armor, damage, damage_mind, MAX_xp, const_armor, attack_modifier;
 
     public enemy(String name, int xp, int armor, int damage, int attack_modifier, int damage_mind, int mindDamagePercent, int defencePercent) {

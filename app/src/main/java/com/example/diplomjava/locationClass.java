@@ -29,7 +29,7 @@ public class locationClass {
     }
 
     String giving_out_loot(avatar hero) {
-        String lootOne = "";
+        String lootOne;
         String lootTwo = "Всякий мусор";
         Object Added_item = loot.get(new Random().nextInt(loot.size()));
         if (Added_item instanceof item) {

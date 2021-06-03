@@ -1,8 +1,6 @@
 package com.example.diplomjava;
 
 import android.annotation.SuppressLint;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class weapon {
     String description, name;
