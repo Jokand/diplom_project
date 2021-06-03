@@ -21,7 +21,7 @@ public class locationClass {
         MainActivity.ritual_counter--;
         if(chance_exploration<3){
             return giving_out_loot(hero);
-        } else if(3<chance_exploration && chance_exploration<6){
+        } else if(3<chance_exploration && chance_exploration<6 && events != null){
             return events.get(new Random().nextInt(events.size()));
         } else {
             return enemy_in_location.get(new Random().nextInt(enemy_in_location.size()));
