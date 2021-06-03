@@ -7,7 +7,7 @@ public class enemy {
     int bodyDamagePercent, mindDamagePercent, defencePercent;
     int xp, armor, damage, damage_mind, MAX_xp, const_armor, attack_modifier;
 
-    public enemy(String name, int xp, int armor, int damage, int attack_modifier, int damage_mind, int bodyDamagePercent, int mindDamagePercent, int defencePercent) {
+    public enemy(String name, int xp, int armor, int damage, int attack_modifier, int damage_mind, int mindDamagePercent, int defencePercent) {
         this.name = name;
         this.xp = xp;
         this.armor = armor;
@@ -15,7 +15,6 @@ public class enemy {
         this.attack_modifier = attack_modifier;
         this.damage_mind = damage_mind;
         this.MAX_xp = xp;
-        this.bodyDamagePercent = bodyDamagePercent;
         this.mindDamagePercent = mindDamagePercent;
         this.defencePercent = defencePercent;
     }
@@ -31,15 +30,8 @@ public class enemy {
         armor = armor + 2;
     }
 
-    void stop_effect_defense() {
-        if (const_armor != armor) {
-            armor = const_armor;
-        }
-    }
-
     int enemy_hit() {
         return new Random().nextInt(19) + 1 + attack_modifier;
     }
-
 
 }

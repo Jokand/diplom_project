@@ -1,6 +1,7 @@
 package com.example.diplomjava;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,15 +13,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static com.example.diplomjava.locationClass.giving_out_loot;
-
 public class MainActivity extends AppCompatActivity {
-    public static int ritual_counter = 15;
+    public static int ritual_counter = 15, finalI;
     LinearLayout textsLayout, buttonsLayout;
     TextView someTextHelper, fightAvatarText, fightEnemyText, WaitingText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        startService(new Intent(this, MyService.class));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_field);
         someTextHelper = new TextView(getApplicationContext());
@@ -44,10 +44,13 @@ public class MainActivity extends AppCompatActivity {
         clothes helmet = new clothes("Немецкая каска", "Старая немецкая каска, покрытая оккультными символами.", 1, 2, 3);
         clothes bulletproof_vest = new clothes("Бронежелет", "Хороший новый бронежелет, который лежал где то на складах", 4, 1, 2);
         clothes trousers = new clothes("Армейские штаны", "Армейские штаны из крепкой ткани, которые защищают своего носителя от многого", 2, 1, 1);
-        enemy Enemy_1 = new enemy("Культист", 15, 12, 4, 6, 100, 60, 10, 5);
-        enemy Enemy_2 = new enemy("Фанатик", 10, 13, 5, 4, 100, 50, 10, 5);
-        enemy Enemy_3 = new enemy("Зомби", 20, 10, 3, 4, 100, 70, 2, 1);
+        enemy Enemy_1 = new enemy("Культист", 15, 12, 4, 2, 4, 50, 10);
+        enemy Enemy_2 = new enemy("Фанатик", 10, 13, 5, 3, 6, 60, 10);
+        enemy Enemy_3 = new enemy("Зомби", 20, 10, 3, 2, 3, 30, 10);
+        enemy Boss = new enemy("Капитан", 50, 14, 8, 4, 8, 65, 1);
         ArrayList<enemy> enemies = new ArrayList<>();
+        ArrayList<enemy> boss = new ArrayList<enemy>();
+        boss.add(Boss);
         enemies.add(Enemy_1);
         enemies.add(Enemy_2);
         enemies.add(Enemy_3);
@@ -88,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
                 kitchen = new locationClass("Кухня", "б", loots, events, enemies),
                 hospital = new locationClass("Больница", "в", loots, events, enemies),
                 engine_room = new locationClass("Машинное отделение", "г", loots, events, enemies),
-                warehouse = new locationClass("Склад", "д", loots, events, enemies);
+                warehouse = new locationClass("Склад", "д", loots, events, enemies),
+                bossFight = new locationClass("Место главного ритуала", "д", loots, null, boss);
 
         ArrayList<locationClass> locations = new ArrayList<>();
         locations.add(living_spaces);
@@ -96,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         locations.add(hospital);
         locations.add(engine_room);
         locations.add(warehouse);
+        locations.add(bossFight);
         avatar hero = new avatar(20, 30, 10, 10, 4, arms, cap, T_shirt, shorts);
         //тестовый кусок начало
         hero.available_equipment.add(knife);
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         });
         return btn;
     }
-    public void selectAvailableEquipment(avatar hero, ArrayList location) {
+    public void selectAvailableEquipment(avatar hero, ArrayList<locationClass> location) {
         buttonsLayout.removeAllViews();
         hero.const_armor = 10 + hero.head_clothes.armor_class + hero.body_clothes.armor_class + hero.legs_clothes.armor_class;
         hero.const_armor_mind = 10 + hero.head_clothes.mind_armor_class + hero.body_clothes.mind_armor_class + hero.legs_clothes.mind_armor_class;
@@ -151,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 WaitingText.setText("Вы хорошо отдохнули и полечились. Вам стало в разы лучше \n" + (hero.avatar_healing_xp(5) + "\n" + hero.avatar_healing_mind(2)));
                 textsLayout.removeView(WaitingText);
                 textsLayout.addView(WaitingText);
+                lobby(hero, locations);
             }
         });
         buttonsLayout.addView(WaitingButton);
@@ -158,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < locations.size(); i++) {
             Button b = new Button(getApplicationContext());
             b.setText(locations.get(i).name);
-            int finalI = i;
+            finalI = i;
             if (i == 0) {
                 btn.setText("Выбор брони и оружия перед вылазкой");
                 btn.setOnClickListener(v1 -> {
@@ -174,37 +180,45 @@ public class MainActivity extends AppCompatActivity {
                         someTextHelper.setText("Вы пошли исследовать " + locations.get(finalI).name);
                         Object vote = locations.get(finalI).exploration(hero); //1 - поражение 2 - победа 3 - побег
                         textsLayout.addView(someTextHelper);
-
                         if (vote instanceof event) {
                             event vote1 = (event) vote;
-                            vote1.issuing_an_event(hero);
-                            giving_out_loot(hero);
+                            vote1.issuing_an_event(hero, locations);
+                            locations.get(finalI).giving_out_loot(hero);
                         }else if(vote instanceof enemy) {
                             enemy vote1 = (enemy) vote;
+                            someTextHelper.setText(vote1.name + " встретился вам в одном из помещений. Он угрожающе двигается на вас и готовиться атаковать.");
                             fight(vote1, hero, locations);
-                            giving_out_loot(hero);
+                            locations.get(finalI).giving_out_loot(hero);
                         }else if(vote instanceof String) {
                             String vote1 = (String) vote;
                             textsLayout.removeView(someTextHelper);
                             someTextHelper.setText(vote1);
                             textsLayout.addView(someTextHelper);
                         }
-
-
                     }
                 }
             });
             buttonsLayout.addView(b);
         }
         if(ritual_counter <= 0){
-            textsLayout.removeAllViews();
-            buttonsLayout.removeAllViews();
-            someTextHelper.setText("ВЫ ПРОИГРАЛИ");
-            btn.setText("Хотите попробовать снова?");
-            btn.setOnClickListener(v1 -> {
-                recreate();
-            });
+            gameOver(hero);
         }
+    }
+
+    void gameOver(avatar hero){
+        Button btn = new Button(getApplicationContext());
+        textsLayout.removeAllViews();
+        buttonsLayout.removeAllViews();
+        someTextHelper.setText("ВЫ ПРОИГРАЛИ");
+        btn.setText("Хотите попробовать снова?");
+        btn.setOnClickListener(v1 -> {
+            ritual_counter = 15;
+            hero.xp = hero.MAX_xp;
+            hero.mind = hero.MAX_mind;
+            recreate();
+        });
+        textsLayout.addView(someTextHelper);
+        buttonsLayout.addView(btn);
     }
 
     public  class event{
@@ -217,7 +231,8 @@ public class MainActivity extends AppCompatActivity {
             this.description = description;
         }
         @SuppressLint("SetTextI18n")
-        void issuing_an_event(avatar hero){
+        void issuing_an_event(avatar hero, ArrayList<locationClass> locations){
+            buttonsLayout.removeAllViews();
             int position_of_the_true_answer = new Random().nextInt(false_answer.size());
             false_answer.add(position_of_the_true_answer, true_answer);
             someTextHelper.setText(description);
@@ -233,13 +248,16 @@ public class MainActivity extends AppCompatActivity {
                         textsLayout.removeView(someTextHelper);
                         if(position_of_the_true_answer==finalI){
                             false_answer.remove(position_of_the_true_answer);
-                            someTextHelper.setText("Вы правильно решили задачу\n");
+                            someTextHelper.setText("Вы правильно решили задачу\n" + locations.get(finalI).giving_out_loot(hero));
                             textsLayout.addView(someTextHelper);
+                            buttonsLayout.removeAllViews();
                         }else{
                             false_answer.remove(position_of_the_true_answer);
                             someTextHelper.setText("Вы неправильно решили задачу и довольно сильно нашумели. Теперь вам нужно быстро убегать\n");
                             textsLayout.addView(someTextHelper);
+                            buttonsLayout.removeAllViews();
                         }
+                        buttonsLayout.addView(reverse("Вернуться на базу", hero, locations));
                     }
                 });
                 buttonsLayout.addView(btn);
@@ -314,41 +332,79 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    void enemyAttack(avatar hero, enemy Enemy){
-        Enemy.armor = Enemy.const_armor;
-        int enemyAttack = new Random().nextInt(101);
-        if (enemyAttack < Enemy.bodyDamagePercent && enemyAttack > Enemy.mindDamagePercent) {
-            int hit = Enemy.enemy_hit();
-            textsLayout.removeView(someTextHelper);
-            if ((hit > hero.armor) && (hero.xp > 0)) {
-                hero.xp -= Enemy.attack();
-                someTextHelper.setText("Вас ранил " + Enemy.name + ". Теперь у вас осталось " + hero.xp + "/" + hero.MAX_xp);
-            } else{
-                someTextHelper.setText("Меня ударили, но не пробили броню." + hero.xp + "/" + hero.MAX_xp);
-            }
-            textsLayout.addView(someTextHelper);
-        } else if (enemyAttack < Enemy.bodyDamagePercent && enemyAttack > Enemy.defencePercent) {
-            int hit = Enemy.enemy_hit();
-            textsLayout.removeView(someTextHelper);
-            if ((hit > hero.mind_armor) && (hero.mind > 0)) {
-                hero.mind -= Enemy.attack_mind();
-                someTextHelper.setText("Ваш разум повредил " + Enemy.name + ". Теперь у вас осталось " + hero.mind + "/" + hero.MAX_mind);
-            } else{
-                someTextHelper.setText("Меня ударили, но не пробили ментальную броню." + hero.mind + "/" + hero.MAX_mind);
-            }
-            textsLayout.addView(someTextHelper);
-        } else {
-            Enemy.defense();
-            textsLayout.removeView(someTextHelper);
-            someTextHelper.setText(Enemy.name + " усилил защиту " + Enemy.armor);
-            textsLayout.addView(someTextHelper);
+    void fightResult(int Result, avatar hero, enemy Enemy, ArrayList<locationClass> locations){
+        switch(Result) {//1 победа 2 поражение 3 побег
+            case 1:
+                textsLayout.removeAllViews();
+                buttonsLayout.removeAllViews();
+                someTextHelper.setText("Вы победили противника и смогли хорошо исследовать место \n" + locations.get(finalI).giving_out_loot(hero));
+                textsLayout.addView(someTextHelper);
+                Enemy.xp = Enemy.MAX_xp;
+                buttonsLayout.addView(reverse("Далее", hero, locations));
+            break;
+            case 2:
+                gameOver(hero);
+                break;
+            case 3:
+                textsLayout.removeAllViews();
+                buttonsLayout.removeAllViews();
+                lobby(hero, locations);
+                break;
+            default:
+                break;
         }
     }
 
+
     @SuppressLint("SetTextI18n")
-    public void fight(enemy Enemy, avatar hero, ArrayList locations){
-        textsLayout.removeAllViews();
+    void enemyAttack(avatar hero, enemy Enemy, ArrayList<locationClass> locations){
+        Enemy.armor = Enemy.const_armor;
+        int enemyAttack = new Random().nextInt(101);
+        if (enemyAttack < 101 && enemyAttack > Enemy.mindDamagePercent) {
+            int hit = Enemy.enemy_hit();
+            textsLayout.removeView(fightEnemyText);
+            if ((hit > hero.armor) && (hero.xp > 0)) {
+                hero.xp -= Enemy.attack();
+                fightEnemyText.setText("Вас ранил " + Enemy.name + ". Теперь у вас осталось " + hero.xp + "/" + hero.MAX_xp);
+            } else{
+                fightEnemyText.setText("Меня ударили, но не пробили броню." + hero.xp + "/" + hero.MAX_xp);
+            }
+            textsLayout.addView(fightEnemyText);
+        } else if (enemyAttack < Enemy.mindDamagePercent && enemyAttack > Enemy.defencePercent) {
+            int hit = Enemy.enemy_hit();
+            textsLayout.removeView(fightEnemyText);
+            if ((hit > hero.mind_armor) && (hero.mind > 0)) {
+                hero.mind -= Enemy.attack_mind();
+                fightEnemyText.setText("Ваш разум повредил " + Enemy.name + ". Теперь у вас осталось " + hero.mind + "/" + hero.MAX_mind);
+            } else{
+                fightEnemyText.setText("Меня ударили, но не пробили ментальную броню." + hero.mind + "/" + hero.MAX_mind);
+            }
+            textsLayout.addView(fightEnemyText);
+        } else {
+            Enemy.defense();
+            textsLayout.removeView(fightEnemyText);
+            fightEnemyText.setText(Enemy.name + " усилил защиту " + Enemy.armor);
+            textsLayout.addView(fightEnemyText);
+        }
+        if(hero.xp<=0||hero.mind<=0){
+            buttonsLayout.removeAllViews();
+            textsLayout.removeAllViews();
+            fightResult(2, hero,Enemy, locations);
+        } else if(Enemy.xp<=0){
+            buttonsLayout.removeAllViews();
+            textsLayout.removeAllViews();
+            fightResult(1, hero,Enemy, locations);
+        } else
+            fight(Enemy, hero, locations);
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void fight(enemy Enemy, avatar hero, ArrayList<locationClass> locations){
         buttonsLayout.removeAllViews();
+        fightAvatarText.setText(" Вильям" + " : " + "Состояние здоровья " +  hero.xp + "/" + hero.MAX_xp + "   Состояние рассудка " +  hero.mind + "/" + hero.MAX_mind + "\n"
+                +" " + Enemy.name + " : " + "Состояние здоровья " +  Enemy.xp + "/" + Enemy.MAX_xp +"\n Что вы собираетесь делать?");
+        textsLayout.removeView(fightAvatarText);
+        textsLayout.addView(fightAvatarText);
         hero.armor = hero.const_armor;
         hero.mind_armor = hero.const_armor_mind;
         Button attack = new Button(getApplicationContext());
@@ -368,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
                     someTextHelper.setText("Вы не попали по " + Enemy.name + ". " + Enemy.xp + "/" + Enemy.MAX_xp);
                 }
                 textsLayout.addView(someTextHelper);
-                enemyAttack(hero, Enemy);
+                enemyAttack(hero, Enemy, locations);
             }
         });
         buttonsLayout.addView(attack);
@@ -378,6 +434,7 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
+                buttonsLayout.removeAllViews();
                 textsLayout.removeView(someTextHelper);
                 someTextHelper.setText("Выберите что будете защищать:");
                 textsLayout.addView(someTextHelper);
@@ -390,7 +447,7 @@ public class MainActivity extends AppCompatActivity {
                         textsLayout.removeView(someTextHelper);
                         someTextHelper.setText("Вы встали в защитную стойку. Ваша защита была повышена на 2 еденицы. Ваша защита теперь равна " + hero.armor + ".");
                         textsLayout.addView(someTextHelper);
-                        enemyAttack(hero, Enemy);
+                        enemyAttack(hero, Enemy, locations);
                     }
                 });
                 Button defenceMind = new Button(getApplicationContext());
@@ -402,20 +459,29 @@ public class MainActivity extends AppCompatActivity {
                         textsLayout.removeView(someTextHelper);
                         someTextHelper.setText("Вы отчистили свой разум. Ваша ментальная защита была повышена на 2 еденицы. Ваша ментальная защита теперь равна " + hero.mind_armor + ".");
                         textsLayout.addView(someTextHelper);
-                        enemyAttack(hero, Enemy);
+                        enemyAttack(hero, Enemy, locations);
+                    }
+                });
+                Button goToBack = new Button(getApplicationContext());
+                goToBack.setText("Назад");
+                goToBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fight(Enemy, hero, locations);
                     }
                 });
                 buttonsLayout.addView(defenceBody);
                 buttonsLayout.addView(defenceMind);
+                buttonsLayout.addView(goToBack);
             }
         });
         buttonsLayout.addView(defence);
-
         Button useItems = new Button(getApplicationContext());
         useItems.setText("Использовать предмет");
         useItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                buttonsLayout.removeAllViews();
                 if (hero.inventory.size() == 0) {
                     textsLayout.removeView(someTextHelper);
                     someTextHelper.setText("Инвентарь пуст");
@@ -445,7 +511,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             textsLayout.addView(someTextHelper);
                             hero.inventory.remove(inventory_vote);
-                            enemyAttack(hero, Enemy);
+                            enemyAttack(hero, Enemy, locations);
                         }
                     });
                     buttonsLayout.addView(btn);
@@ -472,7 +538,7 @@ public class MainActivity extends AppCompatActivity {
                 textsLayout.removeView(someTextHelper);
                 someTextHelper.setText("Вы сбежали с поля боя");
                 textsLayout.addView(someTextHelper);
-                lobby(hero, locations);
+                fightResult(3, hero, Enemy, locations);
             }
         });
         buttonsLayout.addView(runningOnFight);
@@ -496,5 +562,12 @@ public class MainActivity extends AppCompatActivity {
 //            result_defeat = 2;
 //        }
         //return result_defeat;//1 - поражение 2 - победа 3 - побег
+    }
+    public void onBackPressed() {
+        stopService(new Intent(this, MyService.class));
+    }
+    protected void onDestroy() {
+        onBackPressed();
+        super.onDestroy();
     }
 }

@@ -1,14 +1,12 @@
 package com.example.diplomjava;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 public class locationClass {
     String name;
     String description;
-    static ArrayList<Object> loot;
-    static ArrayList<MainActivity.event> events;
-    static ArrayList<enemy> enemy_in_location;
-    Scanner cin = new Scanner(System.in);
+    ArrayList<Object> loot;
+    ArrayList<MainActivity.event> events;
+    ArrayList<enemy> enemy_in_location;
 
     public locationClass(String name, String description, ArrayList<Object> loot, ArrayList<MainActivity.event> events, ArrayList<enemy> enemy_in_location) {
         this.name = name;
@@ -23,14 +21,14 @@ public class locationClass {
         MainActivity.ritual_counter--;
         if(chance_exploration<3){
             return giving_out_loot(hero);
-        } else if(3<chance_exploration && chance_exploration<6){
+        } else if(3<chance_exploration && chance_exploration<6 && events != null){
             return events.get(new Random().nextInt(events.size()));
         } else {
             return enemy_in_location.get(new Random().nextInt(enemy_in_location.size()));
         }
     }
 
-    static String giving_out_loot(avatar hero) {
+    String giving_out_loot(avatar hero) {
         String lootOne = "";
         String lootTwo = "Всякий мусор";
         Object Added_item = loot.get(new Random().nextInt(loot.size()));
