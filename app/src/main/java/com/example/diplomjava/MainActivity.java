@@ -417,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void fight(enemy Enemy, avatar hero, ArrayList<locationClass> locations){
         buttonsLayout.removeAllViews();
-        fightAvatarText.setText(" Максим" + " : " + "Состояние здоровья " +  hero.xp + "/" + hero.MAX_xp + "   Состояние рассудка " +  hero.mind + "/" + hero.MAX_mind + "\n"
+        fightAvatarText.setText(" Максим" + " : " + "Состояние здоровья " +  hero.xp + "/" + hero.MAX_xp + " \n Состояние рассудка " +  hero.mind + "/" + hero.MAX_mind + "\n"
                 +" " + Enemy.name + " : " + "Состояние здоровья " +  Enemy.xp + "/" + Enemy.MAX_xp +"\n Что вы собираетесь делать?");
         textsLayout.removeView(fightAvatarText);
         textsLayout.addView(fightAvatarText);
