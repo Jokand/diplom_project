@@ -17,7 +17,7 @@ public class locationClass {
      Object exploration(avatar hero) {
         int chance_exploration = new Random().nextInt(11);
         MainActivity.ritual_counter--;
-        if(chance_exploration<3){
+        if(chance_exploration<2){
             return giving_out_loot(hero);
         } else if(3<chance_exploration && chance_exploration<6 && events != null){
             return events.get(new Random().nextInt(events.size()));
