@@ -3,14 +3,12 @@ import java.util.ArrayList;
 import java.util.Random;
 public class locationClass {
     String name;
-    String description;
     ArrayList<Object> loot;
     ArrayList<MainActivity.event> events;
     ArrayList<enemy> enemy_in_location;
 
-    public locationClass(String name, String description, ArrayList<Object> loot, ArrayList<MainActivity.event> events, ArrayList<enemy> enemy_in_location) {
+    public locationClass(String name, ArrayList<Object> loot, ArrayList<MainActivity.event> events, ArrayList<enemy> enemy_in_location) {
         this.name = name;
-        this.description = description;
         this.loot = loot;
         this.events = events;
         this.enemy_in_location = enemy_in_location;

@@ -31,51 +31,87 @@ public class MainActivity extends AppCompatActivity {
 
         TextView someTextHelper = new TextView(getApplicationContext());
 
-        item heal_body = new item("Аптечка", 5, 1);
-        item heal_mind = new item("Книга", 5, 2);
-        item damage_enemy = new item("Обрез", 10, 3);
+        item heal_body_small = new item("Бинты", 5, 1);
+        item heal_mind_small = new item("Аккультные записи", 5, 2);
+        item damage_enemy_small = new item("Самострел", 10, 3);
+        item heal_body_huge = new item("Аптечка", 10, 1);
+        item heal_mind_huge = new item("Запретная книга", 10, 2);
+        item damage_enemy_huge = new item("Обрез", 15, 3);
 
         weapon arms = new weapon("Кулаки", 1, "Голые кулаки. Практически не наносят урона");
+        weapon duct = new weapon("Труба", 2, "Метровый отрезок стальной трубы. Место хвата перевязано тряпкой для предотвращения выскальзывания оружия из руки");
         weapon knife = new weapon("Нож", 3, "Большой острый нож с следами ржавчины. Этот нож отнял очень много жизней");
+        weapon cleaver = new weapon("Тесак", 5, "Крупный тесак, взятый с трупа корабельного кока. Он обагрён кровью многих невинных людей, что даже подумать страшно.");
+
         clothes cap = new clothes("Кепка", "Морская кепка", 0, 1, 3);
-        clothes T_shirt = new clothes("Футболка", "Простая тряпичная футболка", 0, 1, 2);
-        clothes shorts = new clothes("Шортики", "Синие шорты по колено", 1, 0, 1);
+        clothes T_shirt = new clothes("Футболка", "Простая тряпичная футболка", 1, 0, 2);
+        clothes shorts = new clothes("Шортики", "Синие шорты по колено", 0, 0, 1);
+
         clothes helmet = new clothes("Немецкая каска", "Старая немецкая каска, покрытая оккультными символами.", 1, 2, 3);
         clothes bulletproof_vest = new clothes("Бронежелет", "Хороший новый бронежелет, который лежал где то на складах", 4, 1, 2);
         clothes trousers = new clothes("Армейские штаны", "Армейские штаны из крепкой ткани, которые защищают своего носителя от многого", 2, 1, 1);
-        enemy Enemy_1 = new enemy("Культист", 15, 12, 4, 2, 4, 50, 10);
+
+        clothes trousers1 = new clothes("Матросские брюки", "Брюки особого пошива, которые носят большинство матросов на службе.", 1, 0, 1);
+        clothes trousers2 = new clothes("Зимний рабочий полукомбинезон", "Чёрный полукомбинезон с утеплителем, довольно удобный и помогает в сложных ситуациях.", 3, 0, 1);
+        clothes trousers3 = new clothes("Шаровары культистов", " Шаровары взятые у фанатика-хранителя. Обеспечивают неплохую защиту и странные рисунки на них помогают меньше беспокоится об ужасах, происходящих вокруг.", 3, 0, 1);
+
+        clothes bathmat = new clothes("Бушлат", "Двубортная суконная чёрная куртка на тёплой подкладке с отложным воротником. Хорошо защищает от непогоды и случайных ранений.", 3, 0, 2);
+        clothes apron = new clothes("Поварской фартук", " Поварской фартук, снятый с хладного трупа кока. Плотная ткань обеспечивает неплохую защиту от ударов и его кровавая история дарует спокойствие, ибо вы убили его носителя.", 2, 2, 2);
+
+        clothes helmet1 = new clothes("Зимняя шапка", "Неизвестно откуда она взялась тут, но она есть и теперь служит вам.", 1, 1, 3);
+        clothes helmet2 = new clothes("Каска", "Звонко звучит при сильном ударе, но главное что этот удар её не пробивает.", 2, 1, 3);
+
+                enemy Enemy_1 = new enemy("Культист", 15, 12, 4, 2, 4, 50, 10);
         enemy Enemy_2 = new enemy("Фанатик", 10, 13, 5, 3, 6, 60, 10);
         enemy Enemy_3 = new enemy("Зомби", 20, 10, 3, 2, 3, 30, 10);
-        enemy Boss = new enemy("Капитан", 50, 14, 8, 4, 8, 65, 1);
+        enemy Enemy_4 = new enemy("Рыболюд", 13, 13, 2, 4, 6, 50, 10);
+        enemy Enemy_5 = new enemy("Иллитид", 25, 14, 3, 3, 8, 30, 10);
+        enemy Boss = new enemy("Капитан", 60, 16, 8, 4, 8, 65, 1);
         ArrayList<enemy> enemies = new ArrayList<>();
         ArrayList<enemy> boss = new ArrayList<>();
         boss.add(Boss);
         enemies.add(Enemy_1);
         enemies.add(Enemy_2);
         enemies.add(Enemy_3);
+        enemies.add(Enemy_4);
+        enemies.add(Enemy_5);
 
         ArrayList<Object> loots = new ArrayList<>();
-        loots.add(heal_body);
-        loots.add(heal_mind);
-        loots.add(damage_enemy);
+        loots.add(heal_mind_small);
+        loots.add(heal_body_small);
+        loots.add(damage_enemy_small);
+        loots.add(heal_mind_huge);
+        loots.add(heal_body_huge);
+        loots.add(damage_enemy_huge);
         loots.add(knife);
+        loots.add(duct);
+        loots.add(cleaver);
         loots.add(helmet);
+        loots.add(helmet1);
+        loots.add(helmet2);
         loots.add(bulletproof_vest);
         loots.add(trousers);
+        loots.add(trousers1);
+        loots.add(trousers2);
+        loots.add(trousers3);
+        loots.add(apron);
+        loots.add(bathmat);
 
         ArrayList<String> false_answer = new ArrayList<>();
         false_answer.add("Десять");
         false_answer.add("Пять");
-        false_answer.add("Восемь");
+        false_answer.add("Двадцать три");
         false_answer.add("Двенадцать");
-        false_answer.add("Сороктри");
-        event one = new event("Два", false_answer, "1 + 1"),
-                two = new event("Четыре", false_answer, "2 + 2"),
-                three = new event("3", false_answer, "2 + 1"),
-                four = new event("Пятнадцать", false_answer, "3 * 5"),
-                five = new event("Сорокчетыре", false_answer, "4 + 4 на js"),
-                six = new event("Двадцать", false_answer, "5 * 4"),
-                seven = new event("Восемнадцать", false_answer, "3 * 3 * 2");
+        false_answer.add("Сорок три");
+        false_answer.add("Сто пятнадцать");
+        event one = new event("Восемь", false_answer, "Сколько граней у шестигранного карандаша?"),
+                two = new event("Четыре", false_answer, "Десять Иллитидов и рыболюдей накормили 56-ю кончностями. Каждому Иллитиду досталось 6 конечностей, каждому рыболюду - пять. Сколько было рыболюдов?"),
+                three = new event("Три", false_answer, " Суммарное колличество измерений 4 датчиков равняется 68, а 4 общих назад было 53. Сколько измерений назад был поставлен самый новый датчик?"),
+                four = new event("Сто тридцать два", false_answer, " Памятка к паролю:  В Америке дату 1 июля 2003 года записывают так: 7/1/2003, а в других странах: 1/7/2003. Если не знать, в каком формате записанное число, то скольких дат в году можно истолковать неверно?"),
+                five = new event("Сорок четыре", false_answer, " Сколько раз на протяжении суток минутная и часовая стрелки часов образуют прямой угол?"),
+                six = new event("Двадцать", false_answer,  "Два товарных корабля, оба длиной в 250 м, плывут навстречу друг другу с одинаковой скоростью 45 км/час. Сколько секунд пройдет после того, как встретились носы кораблей, прежде чем корабли встретяться кормами?"),
+                seven = new event("Тридцать шесть", false_answer, "Плыла стая рыб, увидел их матрос и говорит:\n" +
+                        "– По-видимому, вас сто!\n" + "А рыбы и отвечают:\n" + "– «Если бы нас столько,\n" + "Да еще бы столько,\n" + "И половину как столько,\n" + "И четверть как столько,\n" + "И ты бы с нами, – тогда бы сто и было».\n" + "     Сколько рыб?");
         ArrayList<event> events = new ArrayList<>();
         events.add(one);
         events.add(two);
@@ -86,12 +122,12 @@ public class MainActivity extends AppCompatActivity {
         events.add(seven);
 
         locationClass
-                living_spaces = new locationClass("Жилые помещения", "a", loots, events, enemies),
-                kitchen = new locationClass("Кухня", "б", loots, events, enemies),
-                hospital = new locationClass("Больница", "в", loots, events, enemies),
-                engine_room = new locationClass("Машинное отделение", "г", loots, events, enemies),
-                warehouse = new locationClass("Склад", "д", loots, events, enemies),
-                bossFight = new locationClass("Место главного ритуала", "д", loots, null, boss);
+                living_spaces = new locationClass("Жилые помещения", loots, events, enemies),
+                kitchen = new locationClass("Кухня", loots, events, enemies),
+                hospital = new locationClass("Больница", loots, events, enemies),
+                engine_room = new locationClass("Машинное отделение", loots, events, enemies),
+                warehouse = new locationClass("Склад", loots, events, enemies),
+                bossFight = new locationClass("Место главного ритуала", loots, null, boss);
 
         ArrayList<locationClass> locations = new ArrayList<>();
         locations.add(living_spaces);
@@ -101,16 +137,8 @@ public class MainActivity extends AppCompatActivity {
         locations.add(warehouse);
         locations.add(bossFight);
         avatar hero = new avatar(20, 30, 10, 10, 4, arms, cap, T_shirt, shorts);
-        //тестовый кусок начало
-        hero.available_equipment.add(knife);
-        hero.available_equipment.add(helmet);
-        hero.available_equipment.add(bulletproof_vest);
-        hero.available_equipment.add(trousers);
-        hero.inventory.add(heal_body);
-        hero.inventory.add(heal_mind);
-        hero.inventory.add(damage_enemy);
-        //тестовый кусок конец
-        String logo = "Приветствие игрока, ввод в курс дела. После приветствия перед игроком описывается база и концепция вылазок глазами главного героя.";
+        String logo = "Здравствуйте, меня зовут Калашников Максим и если вы читаете это, знайте, тут рассказываются истинные события подлодки Борей. Совсем недавно тут всё было относительно хорошо, " +
+                "но теперь события принимают ужасающий оборот. Экипаж собирается призвать конец света и только я могу это предотвратить!";
         someTextHelper.setText(logo);
         textsLayout.addView(someTextHelper);
         buttonsLayout.addView(getStartButton(locations, hero));
@@ -148,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         WaitingButton.setText("Сидеть и отдыхать");
         WaitingButton.setOnClickListener(v -> {
             ritual_counter--;
-            WaitingText.setText("Вы хорошо отдохнули и полечились. Вам стало в разы лучше \n" + (hero.avatar_healing_xp(5) + "\n" + hero.avatar_healing_mind(2)));
+            WaitingText.setText("Вы хорошо отдохнули и полечились. Вам стало в разы лучше \n" + (hero.avatar_healing_xp(5) + "\n" + hero.avatar_healing_mind(4)));
             textsLayout.removeView(WaitingText);
             textsLayout.addView(WaitingText);
             lobby(hero, locations);
@@ -354,9 +382,9 @@ public class MainActivity extends AppCompatActivity {
             textsLayout.removeView(fightEnemyText);
             if ((hit > hero.armor) && (hero.xp > 0)) {
                 hero.xp -= Enemy.attack();
-                fightEnemyText.setText("Вас ранил " + Enemy.name + ". Теперь у вас осталось " + hero.xp + "/" + hero.MAX_xp);
+                fightEnemyText.setText("Вас ранил " + Enemy.name + ". Теперь у вас осталось " + hero.xp + "/" + hero.MAX_xp + " очков жизни");
             } else{
-                fightEnemyText.setText("Меня ударили, но не пробили броню." + hero.xp + "/" + hero.MAX_xp);
+                fightEnemyText.setText("Меня ударили, но не пробили броню." + hero.xp + "/" + hero.MAX_xp + " очков жизни");
             }
             textsLayout.addView(fightEnemyText);
         } else if (enemyAttack < Enemy.mindDamagePercent && enemyAttack > Enemy.defencePercent) {
@@ -364,9 +392,9 @@ public class MainActivity extends AppCompatActivity {
             textsLayout.removeView(fightEnemyText);
             if ((hit > hero.mind_armor) && (hero.mind > 0)) {
                 hero.mind -= Enemy.attack_mind();
-                fightEnemyText.setText("Ваш разум повредил " + Enemy.name + ". Теперь у вас осталось " + hero.mind + "/" + hero.MAX_mind);
+                fightEnemyText.setText("Ваш разум повредил " + Enemy.name + ". Теперь у вас осталось " + hero.mind + "/" + hero.MAX_mind + " очков рассудка");
             } else{
-                fightEnemyText.setText("Меня ударили, но не пробили ментальную броню." + hero.mind + "/" + hero.MAX_mind);
+                fightEnemyText.setText("Меня ударили, но не пробили ментальную броню." + hero.mind + "/" + hero.MAX_mind + " очков рассудка");
             }
             textsLayout.addView(fightEnemyText);
         } else {
@@ -389,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void fight(enemy Enemy, avatar hero, ArrayList<locationClass> locations){
         buttonsLayout.removeAllViews();
-        fightAvatarText.setText(" Вильям" + " : " + "Состояние здоровья " +  hero.xp + "/" + hero.MAX_xp + "   Состояние рассудка " +  hero.mind + "/" + hero.MAX_mind + "\n"
+        fightAvatarText.setText(" Максим" + " : " + "Состояние здоровья " +  hero.xp + "/" + hero.MAX_xp + "   Состояние рассудка " +  hero.mind + "/" + hero.MAX_mind + "\n"
                 +" " + Enemy.name + " : " + "Состояние здоровья " +  Enemy.xp + "/" + Enemy.MAX_xp +"\n Что вы собираетесь делать?");
         textsLayout.removeView(fightAvatarText);
         textsLayout.addView(fightAvatarText);

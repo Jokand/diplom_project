@@ -17,7 +17,6 @@ public class MyService extends Service {
     public void onCreate() {
         player = MediaPlayer.create(this, R.raw.music);
         player.setLooping(true); // зацикливаем
-
     }
 
     @Override
