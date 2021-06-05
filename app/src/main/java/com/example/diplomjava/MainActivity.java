@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         clothes helmet1 = new clothes("Зимняя шапка", "Неизвестно откуда она взялась тут, но она есть и теперь служит вам.", 1, 1, 3);
         clothes helmet2 = new clothes("Каска", "Звонко звучит при сильном ударе, но главное что этот удар её не пробивает.", 2, 1, 3);
 
-                enemy Enemy_1 = new enemy("Культист", 15, 12, 4, 2, 4, 50, 10);
+        enemy Enemy_1 = new enemy("Культист", 15, 12, 4, 2, 4, 50, 10);
         enemy Enemy_2 = new enemy("Фанатик", 10, 13, 5, 3, 6, 60, 10);
         enemy Enemy_3 = new enemy("Зомби", 20, 10, 3, 2, 3, 30, 10);
         enemy Enemy_4 = new enemy("Рыболюд", 13, 13, 2, 4, 6, 50, 10);
@@ -518,10 +518,16 @@ public class MainActivity extends AppCompatActivity {
         Button runningOnFight = new Button(getApplicationContext());
         runningOnFight.setText("Убежать");
         runningOnFight.setOnClickListener(v -> {
+            Random random = new Random();
             textsLayout.removeView(someTextHelper);
-            someTextHelper.setText("Вы сбежали с поля боя");
+            if(random.nextBoolean()){
+                someTextHelper.setText("Вы сбежали с поля боя");
+                fightResult(3, hero, Enemy, locations);
+                textsLayout.addView(someTextHelper);
+            }
             textsLayout.addView(someTextHelper);
-            fightResult(3, hero, Enemy, locations);
+            someTextHelper.setText("Вам не удалось сбежать с поля битвы");
+            enemyAttack(hero, Enemy, locations);
         });
         buttonsLayout.addView(runningOnFight);
         Button reviewHero = new Button(getApplicationContext());
