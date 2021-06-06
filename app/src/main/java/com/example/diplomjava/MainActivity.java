@@ -522,12 +522,16 @@ public class MainActivity extends AppCompatActivity {
             textsLayout.removeView(someTextHelper);
             if(random.nextBoolean()){
                 someTextHelper.setText("Вы сбежали с поля боя");
-                fightResult(3, hero, Enemy, locations);
+                textsLayout.removeView(someTextHelper);
                 textsLayout.addView(someTextHelper);
+                fightResult(3, hero, Enemy, locations);
             }
-            textsLayout.addView(someTextHelper);
+            else {
+            textsLayout.removeView(someTextHelper);
             someTextHelper.setText("Вам не удалось сбежать с поля битвы");
+            textsLayout.addView(someTextHelper);
             enemyAttack(hero, Enemy, locations);
+            }
         });
         buttonsLayout.addView(runningOnFight);
         Button reviewHero = new Button(getApplicationContext());
